@@ -1,0 +1,50 @@
+<html>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" 
+    integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<body>
+    <h1>Employee List</h1>
+    
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Department</th>
+            <th>Hire Date</th>
+            <th>Actions</th>
+        </tr>
+        <%
+            try (Connection connection = DBConnection.getConnection()) {
+                String query = "SELECT * FROM employees";
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+        %>
+        <tr>
+            <td><%= rs.getInt("id") %></td>
+            <td><%= rs.getString("first_name") %></td>
+            <td><%= rs.getString("last_name") %></td>
+            <td><%= rs.getString("email") %></td>
+            <td><%= rs.getString("phone") %></td>
+            <td><%= rs.getString("department") %></td>
+            <td><%= rs.getDate("hire_date") %></td>
+            <td>
+                <a href="editEmployee.jsp?id=<%= rs.getInt("id") %>">Edit</a> |
+                <a href="deleteEmployee?id=<%= rs.getInt("id") %>">Delete</a>
+            </td>
+        </tr>
+        <%  
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        %>
+    </table>
+</body>
+</html>
